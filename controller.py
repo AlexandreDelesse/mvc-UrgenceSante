@@ -30,11 +30,7 @@ class Controller:
 			result = self.model.get_bluetooth_value()
 			self.view.value_var.set(str(result) + " °C")
 			self.persistance.write_in_file(result)
-			
-		
 
-	def on_click_button(self):
-		print("clicked")
 
 	def on_off_alarme(self):
 		if (self.alarme == True):

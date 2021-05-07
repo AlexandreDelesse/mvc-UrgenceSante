@@ -8,7 +8,7 @@ class Bluetooth:
 	SEARCH_TIME = 5.0
 	
 	def __init__(self):
-		self.temperature = "none"
+		self.temperature = 0
 		self.mac_address = "e7:4f:89:d8:1e:75"
 	
 	def scan_bluetooth(self):
