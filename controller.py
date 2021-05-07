@@ -1,56 +1,54 @@
 from beacon import Beacon
 from view import View
 from buzzer import Buzzer
-from persistance import Persistance
 import threading, time
 
 class Controller:
-	
-	MAX_TEMPERATURE = 21
-	MIN_TEMPERATURE = 19
-	ALARME_ON = "activée"
-	ALARME_OFF = "desactivée"
-	alarme = True
-
+	stopAllThread = False
 	def __init__(self):
 		self.beacon = Beacon()
 		self.view = View(self)
-		self.persistance = Persistance()
-		self.bt_thread = threading.Thread(target=self.refreshDataInView)
-		self.view.alarme_var.set(self.ALARME_ON)
+		self.bluetoothThread = threading.Thread(target=self.refreshDataInView)
+		self.alarmeThread = threading.Thread(target = self.manageAlarme)
 		self.buzzer = Buzzer()
 		
 
 	def main(self):
-		self.bt_thread.start()
+		self.initViewFromBeacon()
+		self.bluetoothThread.start()
+		self.alarmeThread.start()
 		self.view.main()
 
+
+	def initViewFromBeacon(self):
+		self.view.temperatureVar.set(self.beacon.temperature)
+		self.view.alarmeVar.set(self.beacon.alarmeStatus)
+
 	def refreshDataInView(self):
-		while(1):
+		while(self.stopAllThread == False):
 			self.beacon.refreshTemperature()
 			temperature = self.beacon.getTemperature()
-			temperatureTime = self.beacon.getTemperatureTime()
-			beaconName = self.beacon.getBeaconName()
-
-			self.view.value_var.set(str(temperature) + " °C")
-			self.persistance.write_in_file(beaconName, temperatureTime, temperature)
-
+			self.view.temperatureVar.set(str(temperature) + " °C")
+			
 			time.sleep(5)
 
 
 	def on_off_alarme(self):
-		if (self.beacon.isAlarmeActivated == True):
-			self.beacon.isAlarmeActivated = False
-			self.view.alarme_var.set(self.ALARME_OFF)
-			print("alarme OFF")
-		else:
-			self.beacon.isAlarmeActivated = True
-			self.view.alarme_var.set(self.ALARME_ON)
-			print("alarme ON")
+		self.beacon.switchAlarmeStatus()
+		self.view.alarmeVar.set(self.beacon.alarmeStatus)
+	
+	def manageAlarme(self):
+		while(self.stopAllThread == False):
+			if(self.beacon.alarmeStatus == "ON" and self.beacon.isAlarmeActivated == True):
+				self.buzzer.startBuzzer()
+			time.sleep(0.5)	
+
 
 if __name__== '__main__':
 	app = Controller()
 	app.main()
+	app.stopAllThread = True
+	print("merci au revoir")
 
 
 

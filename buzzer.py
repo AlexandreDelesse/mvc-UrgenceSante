@@ -9,9 +9,9 @@ class Buzzer:
 	GPIO.setup(BUZZER, GPIO.OUT)
 
 	def __init__(self):
-		self.buzzer_thread = threading.Thread(target=self.buzzer_pattern)
+		pass		
 
-	def buzzer_pattern(self):
+	def buzzerPattern(self):
 		print("buzzer start")
 		GPIO.output(self.BUZZER, True)
 		time.sleep(0.5)
@@ -22,8 +22,14 @@ class Buzzer:
 		GPIO.output(self.BUZZER, False)
 		print("buzzer stop")
 
-	def start_buzzer(self):
-		self.buzzer_thread.start()
+	def startBuzzer(self):
+		self.buzzerPattern()
+
+	def stopBuzzer(self):
+		GPIO.cleanup()
+
+	def __del__(self):
+		GPIO.cleanup()
 		
 
 	

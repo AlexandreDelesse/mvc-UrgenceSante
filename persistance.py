@@ -6,7 +6,7 @@ class Persistance:
 	def __init__(self):
 		pass
 	
-	def write_in_file(self, beaconName, temperatureTime, temperature):
+	def writeInFile(self, beaconName, temperatureTime, temperature):
 		date = datetime.now()
 		date_mod = date.strftime("%d_%m_%Y.csv")
 
