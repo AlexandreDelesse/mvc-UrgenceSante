@@ -18,6 +18,7 @@ class Controller:
 		self.bluetoothThread.start()
 		self.alarmeThread.start()
 		self.view.main()
+		self.stopAllThread = True
 
 
 	def initViewFromBeacon(self):
@@ -41,13 +42,12 @@ class Controller:
 		while(self.stopAllThread == False):
 			if(self.beacon.alarmeStatus == "ON" and self.beacon.isAlarmeActivated == True):
 				self.buzzer.startBuzzer()
-			time.sleep(0.5)	
+			time.sleep(1.5)	
 
 
 if __name__== '__main__':
 	app = Controller()
-	app.main()
-	app.stopAllThread = True
+	app.main()	
 	print("merci au revoir")
 
 

@@ -14,12 +14,8 @@ class Buzzer:
 	def buzzerPattern(self):
 		print("buzzer start")
 		GPIO.output(self.BUZZER, True)
-		time.sleep(0.5)
-		GPIO.output(self.BUZZER, False)
-		time.sleep(0.5)
-		GPIO.output(self.BUZZER, True)
-		time.sleep(0.5)
-		GPIO.output(self.BUZZER, False)
+		time.sleep(1)
+		GPIO.output(self.BUZZER, False)		
 		print("buzzer stop")
 
 	def startBuzzer(self):
